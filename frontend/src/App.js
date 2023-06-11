@@ -43,13 +43,24 @@ const returnClarifaiRequestOptions = (imageUrl) => {
   return requestOptions;
 }
 
+
+
+
 const App = () => {
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [box, setBox] = useState({});
   const [route, setRoute] = useState('signin');
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState({
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  });
 
+  
   const calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputimage');
@@ -63,7 +74,17 @@ const App = () => {
     };
   };
 
+  const onSignIn = (user) => {
+    setUser({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      entries: user.entries,
+      joined: user.joined
+    });
+  };
 
+  
   const displayFaceBox = (box) => {
     setBox(box);
   };
@@ -101,7 +122,7 @@ const App = () => {
       {route === 'home' ? (
         <div>
           <Logo />
-          <Rank />
+          <Rank user={user}/>
           <ImageLinkForm
             onInputChange={onInputChange}
             onButtonSubmit={onButtonSubmit}
@@ -109,7 +130,7 @@ const App = () => {
           <FaceRecognition box={box} imageUrl={imageUrl} />
         </div>
       ) : route === 'signin' ? (
-        <SignIn onRouteChange={onRouteChange} />
+        <SignIn onRouteChange={onRouteChange} onSignIn={onSignIn} />
       ) : (
         <Register onRouteChange={onRouteChange} />
       )}

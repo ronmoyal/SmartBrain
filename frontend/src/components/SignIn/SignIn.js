@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SignIn = ({ onRouteChange }) => {
+const SignIn = ({ onRouteChange ,onSignIn}) => {
     const [signInEmail, setSignInEmail] = useState('');
     const [signInPassword, setSignInPassword] = useState('');
 
@@ -24,6 +24,7 @@ const SignIn = ({ onRouteChange }) => {
             .then(response => response.json())
             .then(data => {
                 if (data.message === 'User authenticated.') {
+                    onSignIn(data.user);  // assuming the user data is here
                   onRouteChange('home');
                 }
             })

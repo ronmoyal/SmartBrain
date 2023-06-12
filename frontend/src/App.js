@@ -9,43 +9,6 @@ import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import './App.css';
 
-const returnClarifaiRequestOptions = (imageUrl) => {
-  const PAT = '3b3f0c88b8654208a58eff2fb7cdba82';
-  const USER_ID = 'ronmoyal';
-  const APP_ID = 'FaceDetection';
-  const IMAGE_URL = imageUrl;
-
-  const raw = JSON.stringify({
-    "user_app_id": {
-      "user_id": USER_ID,
-      "app_id": APP_ID
-    },
-    "inputs": [
-      {
-        "data": {
-          "image": {
-            "url": IMAGE_URL
-          }
-        }
-      }
-    ]
-  });
-
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Key ' + PAT
-    },
-    body: raw
-  };
-
-  return requestOptions;
-}
-
-
-
-
 const App = () => {
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -95,10 +58,13 @@ const App = () => {
 
   const onButtonSubmit = () => {
     setImageUrl(input);
-
-    fetch(
-      `https://api.clarifai.com/v2/models/face-detection/versions/6dc7e46bc9124c5c8824be4822abe105/outputs`,
-      returnClarifaiRequestOptions(input)
+  
+      fetch('http://localhost:5000/image', {
+        
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageUrl: input })
+      }
     )
       .then((response) => response.json())
       .then((response) => displayFaceBox(calculateFaceLocation(response)))

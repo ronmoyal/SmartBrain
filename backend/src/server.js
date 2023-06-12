@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 
 import register from './controllers/register.js';
 import signin from './controllers/signin.js';
+import image from './controllers/image.js'
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(express.json());  // This is to parse the JSON body
 
 app.post('/register',  register.handleRegister );
 app.post('/signin',  signin.handleSignIn );
+app.post('/image', image.handleImage); 
 
 
 const PORT = process.env.PORT || 5000;
